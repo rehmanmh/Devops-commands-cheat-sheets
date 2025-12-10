@@ -1,0 +1,183 @@
+# AWS CLI Cheat Sheet
+
+[AWS CLI Reference Documentation](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#available-services)
+
+## Setup
+
+```sh
+# Cli command structure
+aws <service> <action> --region <region> --profile <profileName>
+
+# Configure aws cli
+aws configure
+aws configure --profile <nameOfProfile>
+aws configure set aws_session_token <sessionToken> --profile <nameOfProfile>
+
+# Whoami
+aws sts get-caller-identity
+```
+
+## IAM Commands
+
+### Users/Roles/Groups
+
+```sh
+# list iam users
+aws iam list-users
+
+# list iam roles
+aws iam list-roles
+
+# list iam groups
+aws iam list-groups
+
+# list all iam access keys for a user
+aws iam list-access-keys --user-name <iamUserName> --profile <awsProfile>
+
+# create iam access keys
+aws iam create-access-key --user-name <iamUserName> --profile <awsProfile>
+
+# assume an iam role
+aws sts assume-role --role-arn <arnIamRole> --role-session-name <whatever> --profile <awsProfile>
+```
+
+### Policies
+
+#### User Enumeration
+
+```bash
+# list iam Inline policies attached to user
+aws iam list-user-policies --user-name <user>
+
+# list iam Managed policies attached to user
+aws iam list-attached-user-policies --user-name <user>
+```
+
+#### Role Enumeration
+
+```bash
+# list iam trust policy attached to role
+aws iam get-role --role-name <roleName> --query 'Role.AssumeRolePolicyDocument'
+
+# list Inline policies attached to role
+aws iam list-role-policies --role-name <roleName>
+
+# list Managed policies attached to role
+aws iam list-attached-role-policies --role-name <roleName>
+```
+
+#### Policy Enumeration
+
+```sh
+# view Managed policy info
+aws iam get-policy --policy-arn <policyARN>
+
+# view Managed policy version and actions
+aws iam get-policy-version --policy-arn <policyARN> --version-id <policyVersionId>
+
+# view Inline policy 
+aws iam get-user-policy --user-name <user> --policy-name <policy-name>
+
+# view available versions of a policy
+aws iam list-policy-versions --policy-arn <policyArn>
+
+# view the policy for a particular version
+aws iam get-policy-version --policy-arn <policyArn> --version-id <versionId>
+
+# attach a specific version of a policy
+aws iam set-default-policy-version --policy-arn <policyArn> --version-id <versionId>
+```
+
+## Identity Center Commands
+
+{% code overflow="wrap" %}
+
+```bash
+# list Identity Center instance, returns ARN
+aws sso-admin list-instances --region <region>
+
+# view permission sets
+aws sso-admin list-permission-sets --instance-arn <instanceARN> --region <region>
+
+# view permission set details
+aws sso-admin describe-permission-set --instance-arn <instanceARN> --permission-set-arn <permissionSetARN>
+
+# view Inline policy for permission set
+aws sso-admin get-inline-policy-for-permission-set --instance-arn <instanceARN> --permission-set-arn <permissionSetARN>
+```
+
+{% endcode %}
+
+## S3
+
+{% code overflow="wrap" %}
+
+```bash
+# list bucket contents
+aws s3 ls s3://<bucketName> --recursive --no-sign-request
+
+# copy files
+aws s3 cp s3://<bucketName> /local/path/download --recursive --no-sign-request
+aws s3 cp s3://<bucketName>/object /local/path/download --no-sign-request
+
+# get bucket versioning
+aws s3api list-object-versions --bucket <bucketName>
+
+# get particular version of an object
+aws s3api get-object --bucket <bucketName> --key "object/object" --version-id <versionID> <objectName>
+```
+
+{% endcode %}
+
+## SSM
+
+* Multiple ways to run commands, see [Docs](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ssm/send-command.html#options)
+
+{% code overflow="wrap" %}
+
+```bash
+# remote code execution
+aws ssm send-command \
+    --document-name "AWS-RunShellScript" \
+    --parameters 'commands=["echo HelloWorld"]' \
+    --targets "Key=instanceids,Values=i-1234567890abcdef0,<instanceId2>,<instanceId3>" \
+    --comment "echo HelloWorld"
+    
+# view command log, useful if command failed
+aws ssm list-command-invocations \
+    --instance-id "<instanceId>"
+    --command-id "<commandId>"
+    --details 
+    
+# base64 encode commands
+aws ssm send-command \
+    --instance-id "<instanceId>"
+    --document-name "<name>"
+    --comment "<comment>"
+    --parameters '{"commands":["echo <base64EncodedCommand> | base64 -d | bash"]}'
+```
+
+{% endcode %}
+
+## Secrets Manager
+
+```bash
+# list stored secrets
+aws secretsmanager list-secrets
+
+# read a secret
+aws secretsmanager get-secret-value --secret-id <name>
+
+# read a secret (version, when available)
+aws secretsmanager get-secret-value --secret-id <name> --version-id <versionId>
+```
+
+## DynamoDB
+
+```bash
+# list tables
+aws dynamodb list-tables
+
+# read tables
+aws dynamodb scan --table-name <name>
+```
