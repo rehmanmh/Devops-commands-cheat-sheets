@@ -1,10 +1,9 @@
-# AWS CLI Cheat Sheet
+https://docs.aws.amazon.com/cli/latest/reference/#available-services  - referernce materil for awscli commands
+https://www.techwithtyler.dev/cloud-security/aws/cli-cheat-sheet
 
-[AWS CLI Reference Documentation](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html#available-services)
+Setup
 
-## Setup
-
-```sh
+Copy
 # Cli command structure
 aws <service> <action> --region <region> --profile <profileName>
 
@@ -15,13 +14,11 @@ aws configure set aws_session_token <sessionToken> --profile <nameOfProfile>
 
 # Whoami
 aws sts get-caller-identity
-```
 
-## IAM Commands
+IAM Commands
+Users/Roles/Groups
 
-### Users/Roles/Groups
-
-```sh
+Copy
 # list iam users
 aws iam list-users
 
@@ -34,28 +31,38 @@ aws iam list-groups
 # list all iam access keys for a user
 aws iam list-access-keys --user-name <iamUserName> --profile <awsProfile>
 
-# create iam access keys
-aws iam create-access-key --user-name <iamUserName> --profile <awsProfile>
+Policies
+User Enumeration
 
-# assume an iam role
-aws sts assume-role --role-arn <arnIamRole> --role-session-name <whatever> --profile <awsProfile>
-```
-
-### Policies
-
-#### User Enumeration
-
-```bash
+Copy
 # list iam Inline policies attached to user
 aws iam list-user-policies --user-name <user>
 
 # list iam Managed policies attached to user
 aws iam list-attached-user-policies --user-name <user>
-```
 
-#### Role Enumeration
 
-```bash
+# create iam access keys
+aws iam create-access-key --user-name <iamUserName> --profile <awsProfile>
+
+# assume an iam role
+aws sts assume-role --role-arn <arnIamRole> --role-session-name <whatever> --
+
+
+
+Policies
+User Enumeration
+
+Copy
+# list iam Inline policies attached to user
+aws iam list-user-policies --user-name <user>
+
+# list iam Managed policies attached to user
+aws iam list-attached-user-policies --user-name <user>
+
+Role Enumeration
+
+Copy
 # list iam trust policy attached to role
 aws iam get-role --role-name <roleName> --query 'Role.AssumeRolePolicyDocument'
 
@@ -64,11 +71,10 @@ aws iam list-role-policies --role-name <roleName>
 
 # list Managed policies attached to role
 aws iam list-attached-role-policies --role-name <roleName>
-```
 
-#### Policy Enumeration
+Policy Enumeration
 
-```sh
+Copy
 # view Managed policy info
 aws iam get-policy --policy-arn <policyARN>
 
@@ -86,13 +92,11 @@ aws iam get-policy-version --policy-arn <policyArn> --version-id <versionId>
 
 # attach a specific version of a policy
 aws iam set-default-policy-version --policy-arn <policyArn> --version-id <versionId>
-```
 
-## Identity Center Commands
 
-{% code overflow="wrap" %}
+Identity Center Commands
 
-```bash
+Copy
 # list Identity Center instance, returns ARN
 aws sso-admin list-instances --region <region>
 
@@ -104,15 +108,11 @@ aws sso-admin describe-permission-set --instance-arn <instanceARN> --permission-
 
 # view Inline policy for permission set
 aws sso-admin get-inline-policy-for-permission-set --instance-arn <instanceARN> --permission-set-arn <permissionSetARN>
-```
 
-{% endcode %}
 
-## S3
+S3
 
-{% code overflow="wrap" %}
-
-```bash
+Copy
 # list bucket contents
 aws s3 ls s3://<bucketName> --recursive --no-sign-request
 
@@ -125,17 +125,12 @@ aws s3api list-object-versions --bucket <bucketName>
 
 # get particular version of an object
 aws s3api get-object --bucket <bucketName> --key "object/object" --version-id <versionID> <objectName>
-```
 
-{% endcode %}
+SSM
+Multiple ways to run commands, see Docs
 
-## SSM
 
-* Multiple ways to run commands, see [Docs](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ssm/send-command.html#options)
-
-{% code overflow="wrap" %}
-
-```bash
+Copy
 # remote code execution
 aws ssm send-command \
     --document-name "AWS-RunShellScript" \
@@ -145,6 +140,30 @@ aws ssm send-command \
     
 # view command log, useful if command failed
 aws ssm list-command-invocations \
+
+
+
+Secrets Manager
+
+Copy
+# list stored secrets
+aws secretsmanager list-secrets
+
+# read a secret
+aws secretsmanager get-secret-value --secret-id <name>
+
+# read a secret (version, when available)
+aws secretsmanager get-secret-value --secret-id <name> --version-id <versionId>
+
+
+DynamoDB
+
+Copy
+# list tables
+aws dynamodb list-tables
+
+# read tables
+aws dynamodb scan --table-name <name>
     --instance-id "<instanceId>"
     --command-id "<commandId>"
     --details 
@@ -155,29 +174,3 @@ aws ssm send-command \
     --document-name "<name>"
     --comment "<comment>"
     --parameters '{"commands":["echo <base64EncodedCommand> | base64 -d | bash"]}'
-```
-
-{% endcode %}
-
-## Secrets Manager
-
-```bash
-# list stored secrets
-aws secretsmanager list-secrets
-
-# read a secret
-aws secretsmanager get-secret-value --secret-id <name>
-
-# read a secret (version, when available)
-aws secretsmanager get-secret-value --secret-id <name> --version-id <versionId>
-```
-
-## DynamoDB
-
-```bash
-# list tables
-aws dynamodb list-tables
-
-# read tables
-aws dynamodb scan --table-name <name>
-```
