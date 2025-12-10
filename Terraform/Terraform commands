@@ -1,0 +1,171 @@
+Get help​
+terraform -help
+
+terraform fmt -help
+
+Version info​
+terraform version
+
+Format code (fmt)​
+terraform fmt
+
+terraform fmt --recursive
+
+terraform fmt --diff
+
+terraform fmt --check
+
+Initialize directory (init)​
+terraform init
+
+terraform init -get-plugins=false
+
+terraform init -lock=false
+
+terraform init -input=false
+
+terraform init -migrate-state
+
+terraform init -verify-plugins=false
+
+terraform init -upgrade
+
+Modules (get)​
+terraform get
+
+terraform get -update
+
+Validate configuration​
+terraform validate
+
+terraform validate -json
+
+Test configuration (test)​
+terraform test
+
+terraform test -test-directory=tests
+
+terraform test -filter=tests/my_test.tftest.hcl
+
+terraform test -verbose
+
+Plan infrastructure (plan)​
+terraform plan
+
+terraform plan -out=
+
+terraform plan -destroy
+
+Apply infrastructure (apply)​
+terraform apply
+
+terraform apply -auto-approve
+
+terraform apply -lock=false
+
+terraform apply -parallelism=
+
+terraform apply -var="environment=dev"
+
+terraform apply -var-file="varfile.tfvars"
+
+terraform apply -target="module.appgw.0"
+
+Destroy infrastructure (destroy)​
+terraform destroy
+
+terraform destroy -target="module.appgw.0"
+
+terraform destroy --auto-approve
+
+terraform destroy -target="module.appgw.resource[\"key\"]"
+
+Taint / untaint resources​
+terraform taint vm1.name
+
+terraform untaint vm1.name
+
+Refresh state (deprecated)​
+terraform refresh
+
+Show state / plan (show)​
+terraform show
+
+terraform show <path-to-state-or-plan>
+
+State operations (state)​
+terraform state
+
+terraform state list
+
+terraform state mv
+
+terraform state pull > state.tfstate
+
+terraform state push
+
+terraform state replace-provider hashicorp/azurerm customproviderregistry/azurerm
+
+terraform state rm
+
+terraform state show
+
+Import resources (import)​
+terraform import vm1.name -i id123
+
+Provider information (providers)​
+terraform providers
+
+Workspaces (workspace)​
+terraform workspace
+
+terraform workspace show
+
+terraform workspace list
+
+terraform workspace select
+
+terraform workspace new
+
+terraform workspace delete
+
+Outputs (output)​
+terraform output
+
+terraform output -state=
+
+terraform output -json
+
+terraform output vm1_public_ip
+
+Force unlock​
+terraform force-unlock
+
+Login / logout (remote hosts)​
+terraform login
+
+terraform login <hostname>
+
+terraform logout
+
+terraform logout <hostname>
+
+Dependency graph (graph)​
+terraform graph
+
+terraform graph -plan=tfplan
+
+terraform graph -type=plan
+
+terraform graph -draw-cycles
+
+Expression console (console)​
+terraform console
+
+Change directory (run from other dir)​
+terraform -chdir="../dev" apply
+
+Shell tab-completion​
+terraform -install-autocomplete
+
+If you want, the commands can be formatted into 
